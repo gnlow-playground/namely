@@ -1,6 +1,11 @@
-import { arr, hash } from "./src/util.ts"
+import { Mat } from "./src/Mat.ts"
+import {
+arr,
+    hash,
+    pipe,
+ } from "./src/util.ts"
 
-const phonemes = `
+const phonemesData = `
     a,e,i,u,o
     j,w
     l,r
@@ -11,4 +16,32 @@ const phonemes = `
     .trim()
     .split("\n")
     .map(x => x.trim().split(","))
-console.log(phonemes)
+console.log(phonemesData)
+
+const phonemes = [
+    "",
+    ...phonemesData.flat(),
+]
+
+const mat = pipe(
+    new Mat([
+        phonemes.length,
+        phonemes.length,
+    ]),
+    x => x.map(hash),
+    mat => {
+        const sums = arr(mat.dimension[0])
+            .map(x => mat.gets([x, null])
+                .reduce((a, b) => a+b)
+            )
+        return mat.map((v, [_, x]) => v/sums[x]) // todo: fix this
+    },
+    mat => arr(mat.dimension[0])
+    .map(x => mat.gets([x, null])
+        .reduce((a, b) => a+b)
+    )
+)
+
+console.log(
+    mat
+)
