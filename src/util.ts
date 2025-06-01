@@ -59,28 +59,4 @@ export class Mat {
     forEach(f: (value: number, is: number[]) => number) {
         this.map(f)
     }
-    reduce(
-        f: (prev: number, value: number, is: number[]) => number,
-    ): number
-    reduce<T>(
-        f: (prev: T, value: number, is: number[]) => T,
-        init: T,
-    ): T
-    reduce<T>(
-        f: (prev: T, value: number, is: number[]) => T,
-        init?: T,
-    ): T | number {
-        if (init) {
-            return this.data.reduce(
-                (prev, value, i) =>
-                    f(prev, value, this.n2ns(i)),
-                init as T,
-            )
-        } else {
-            return this.data.reduce(
-                (prev, value, i) =>
-                    (f as unknown as (prev: number, value: number, is: number[]) => number)(prev, value, this.n2ns(i)),
-            )
-        }
-    }
 }
