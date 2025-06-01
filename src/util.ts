@@ -12,7 +12,7 @@ export const hash =
 export const n2ns =
 (ls: number[]) =>
 (n: number) =>
-    ls.reduce(
+    ls.reduceRight(
         (a, b) => {
             const res = [...a, n % b]
             n = Math.floor(n / b)
@@ -24,7 +24,7 @@ export const n2ns =
 export const ns2n =
 (ls: number[]) =>
 (ns: number[]) =>
-    ns.reduceRight(
+    ns.reduce(
         (a, b, i) => a * ls[i] + b,
         0,
     )
