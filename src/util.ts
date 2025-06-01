@@ -36,9 +36,9 @@ export const arr =
 export class Mat {
     dimension
     data
-    constructor(dimension: number[], data: number[]) {
+    constructor(dimension: number[], data?: number[]) {
         this.dimension = dimension
-        this.data = data
+        this.data = data || arr(dimension.reduce((a, b) => a*b, 1))
     }
 
     ns2n(ns: number[]) { return ns2n(this.dimension)(ns) }
@@ -50,6 +50,21 @@ export class Mat {
     set(is: number[], value: number) {
         this.data[this.ns2n(is)] = value
     }
+
+    gets(ns: (number | null)[]) {
+        let i = 0
+        const mapper = ns.map(n => n == null ? i++ : -1)
+        const dimension = ns
+            .map((ns, i) => ns == null ? this.dimension[i] : 0)
+            .filter(x => !!x)
+        return new Mat(dimension)
+            .map((_, newNs) => this.get(ns.map((n, i) =>
+                n == null
+                    ? newNs[mapper[i]!]
+                    : n
+            )))
+    }
+
     map(f: (value: number, is: number[]) => number) {
         return new Mat(
             this.dimension,
@@ -84,3 +99,7 @@ export class Mat {
         }
     }
 }
+
+const mat = new Mat([2, 3])
+console.log(mat)
+console.log(mat.gets([0, null]))
