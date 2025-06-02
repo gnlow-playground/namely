@@ -38,3 +38,42 @@ Deno.test("gets", () => {
         new Mat([3], [1, 3, 5])
     )
 })
+
+Deno.test("groupBy", () => {
+    assertEquals(
+        pipe(
+            Mat.fromDimension([2, 3]),
+            x => x.groupBy(v => v % 4),
+        ),
+        new Map([
+            [0, [0, 4]],
+            [1, [1, 5]],
+            [2, [2]],
+            [3, [3]],
+        ]),
+    )
+})
+
+Deno.test("groupByAxis", () => {
+    assertEquals(
+        pipe(
+            Mat.fromDimension([2, 3]),
+            x => x.groupByAxis(0),
+        ),
+        new Mat([2], [
+            [0, 2, 4],
+            [1, 3, 5],
+        ]),
+    )
+    assertEquals(
+        pipe(
+            Mat.fromDimension([2, 3]),
+            x => x.groupByAxis(1),
+        ),
+        new Mat([3], [
+            [0, 1],
+            [2, 3],
+            [4, 5],
+        ]),
+    )
+})

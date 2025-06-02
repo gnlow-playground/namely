@@ -47,5 +47,5 @@ const mat = pipe(
 )
 
 console.log(
-    mat
+    Mat.fromDimension([2, 3]).groupByAxis(0)
 )

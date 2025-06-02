@@ -55,7 +55,7 @@ export class Mat<T> {
             this.data.map((v, i) => f(v, this.n2ns(i))),
         )
     }
-    forEach(f: (value: T, is: number[]) => number) {
+    forEach(f: (value: T, is: number[]) => void) {
         this.map(f)
     }
     reduce(
@@ -81,6 +81,16 @@ export class Mat<T> {
                     (f as unknown as (prev: T, value: T, is: number[]) => T)(prev as T, value as T, this.n2ns(i)),
             )
         }
+    }
+
+    groupBy<K>(f: (value: T, is: number[]) => K) {
+        return Map.groupBy(this.data, (v, i) => f(v, this.n2ns(i)))
+    }
+    groupByAxis(axis: number) {
+        const map = this.groupBy((_, is) => is[axis])
+        const data = arr(this.dimension[axis])
+            .map(i => map.get(i)!)
+        return new Mat([data.length], data)
     }
 
     sum() {
