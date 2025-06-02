@@ -1,5 +1,6 @@
 import { Mat, _ } from "./src/Mat.ts"
 import {
+arr,
     hash,
     pipe,
  } from "./src/util.ts"
@@ -23,8 +24,10 @@ const phonemes = [
 ]
 
 class Lang {
+    seed
     table
     constructor(seed: number | string) {
+        this.seed = seed
         this.table = pipe(
             Mat.fromDimension([
                 phonemes.length,
@@ -38,6 +41,9 @@ class Lang {
                 return mat.map((v, [x]) => v/sums[x])
             },      
         )
+    }
+    hash(...seeds: (number | string)[]) {
+        return hash(this.seed+"_"+seeds.join("_"))
     }
     pick(prevState: [number], seed: number) {
         return pipe(
@@ -53,10 +59,14 @@ class Lang {
             },
         )
     }
+    generate(length: number, seed: number) {
+        const result = [0] as number[]
+        arr(length).forEach(i => {
+            result.push(this.pick([result[i-1]], this.hash(seed, i))[1])
+        })
+        return result.map(x => phonemes[x]).join("")
+    }
 }
 
-const lang = new Lang(0.5)
-
-console.log(
-    lang.pick([0], 0.8)
-)
+const lang = new Lang(0.6)
+console.log(arr(10).map(i => lang.generate(5, i)).join("\n"))
