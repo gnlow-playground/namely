@@ -39,11 +39,11 @@ class Lang {
             },      
         )
     }
-    pick(seed: number) {
+    pick(prevState: [number], seed: number) {
         return pipe(
             this.table,
             mat => mat
-                .gets([0, _])
+                .gets([...prevState, _])
                 .toArray(),
             arr => {
                 let pSum = 0
@@ -58,5 +58,5 @@ class Lang {
 const lang = new Lang(0.5)
 
 console.log(
-    lang.pick(0.8)
+    lang.pick([0], 0.8)
 )
