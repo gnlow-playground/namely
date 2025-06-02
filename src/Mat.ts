@@ -4,6 +4,8 @@ import {
     n2ns,
 } from "./util.ts"
 
+export const _ = null
+
 export class Mat<T> {
     dimension
     data

@@ -1,4 +1,4 @@
-import { Mat } from "./src/Mat.ts"
+import { Mat, _ } from "./src/Mat.ts"
 import {
     hash,
     pipe,
@@ -29,17 +29,17 @@ const mat = pipe(
     ]),
     x => x.map(hash),
     mat => {
-        const sums = mat.indexes([null, 0])
+        const sums = mat.indexes([_, 0])
             .map(([x]) => mat
-                .gets([x, null])
+                .gets([x, _])
                 .sum()
             )
             .toArray()
         return mat.map((v, [x]) => v/sums[x])
     },
-    mat => mat.indexes([null, 0])
+    mat => mat.indexes([_, 0])
         .map(([x]) => mat
-            .gets([x, null])
+            .gets([x, _])
             .sum()
         ),
 )
