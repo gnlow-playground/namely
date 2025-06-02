@@ -22,34 +22,41 @@ const phonemes = [
     ...phonemesData.flat(),
 ]
 
-const mat = pipe(
-    Mat.fromDimension([
-        phonemes.length,
-        phonemes.length,
-    ]),
-    x => x.map(hash),
-    mat => {
-        const sums = mat
-            .sumByAxis(0)
-            .toArray()
-        return mat.map((v, [x]) => v/sums[x])
-    },      
-)
+class Lang {
+    table
+    constructor(seed: number | string) {
+        this.table = pipe(
+            Mat.fromDimension([
+                phonemes.length,
+                phonemes.length,
+            ]),
+            x => x.map(x => hash(seed+"_"+x)),
+            mat => {
+                const sums = mat
+                    .sumByAxis(0)
+                    .toArray()
+                return mat.map((v, [x]) => v/sums[x])
+            },      
+        )
+    }
+    pick(seed: number) {
+        return pipe(
+            this.table,
+            mat => mat
+                .gets([0, _])
+                .toArray(),
+            arr => {
+                let pSum = 0
+                return [0, arr.findIndex(p =>
+                    seed <= (pSum += p)
+                )]
+            },
+        )
+    }
+}
 
-const pick =
-(seed: number) => pipe(
-    mat,
-    mat => mat
-        .gets([0, _])
-        .toArray(),
-    arr => {
-        let pSum = 0
-        return [0, arr.findIndex(p =>
-            seed <= (pSum += p)
-        )]
-    },
-)
+const lang = new Lang(0.5)
 
 console.log(
-    pick(0.8)
+    lang.pick(0.8)
 )
