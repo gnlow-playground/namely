@@ -33,11 +33,23 @@ const mat = pipe(
             .sumByAxis(0)
             .toArray()
         return mat.map((v, [x]) => v/sums[x])
-    },
+    },      
+)
+
+const pick = pipe(
+    mat,
     mat => mat
-        .sumByAxis(0),
+        .gets([0, _])
+        .toArray(),
+    arr =>
+    (seed: number) => {
+        let pSum = 0
+        return arr.findIndex(p =>
+            seed <= (pSum += p)
+        )
+    },  
 )
 
 console.log(
-    mat
+    pick(0.2)
 )
