@@ -34,7 +34,7 @@ const mat = pipe(
             .map(x => mat.gets([x, null])
                 .reduce((a, b) => a+b)
             )
-        return mat.map((v, [_, x]) => v/sums[x]) // todo: fix this
+        return mat.map((v, [x]) => v/sums[x])
     },
     mat => arr(mat.dimension[0])
     .map(x => mat.gets([x, null])

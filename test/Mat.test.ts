@@ -29,7 +29,7 @@ Deno.test("n2ns, ns2n", () => {
     )
 })
 
-Deno.test("basic", () => {
+Deno.test("gets", () => {
     assertEquals(
         pipe(
             new Mat([2, 3]),
