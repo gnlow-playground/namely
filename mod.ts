@@ -10,18 +10,52 @@ const phonemesData = `
     j,w
     l,r
     m,n
-    s,z,f,v
-    p,t,k,b,d,g
+    v,z
+    f,s
+    b,d,g
+    p,t,k
 `
     .trim()
     .split("\n")
     .map(x => x.trim().split(","))
+    .reverse()
 console.log(phonemesData)
 
 const phonemes = [
-    "",
+    "_",
     ...phonemesData.flat(),
 ]
+
+const getSonority =
+(phoneme: string) =>
+    phonemesData.findIndex(v => v.includes(phoneme))
+
+const vowelSonority = phonemesData.length-1
+
+const ssp =
+(sonorities: number[]) => {
+    console.log(sonorities)
+    let dir = 1
+    let prev = -1
+    for (const curr of sonorities) {
+        if (dir == 1) {
+            if (prev > curr) {
+                if (prev == vowelSonority) {
+                    dir = -1
+                } else {
+                    return false
+                }
+            }
+        }
+        if (dir == -1) {
+            if (prev < curr) {
+                dir = 1
+            }
+        }
+        prev = curr
+    }
+    return true
+}
 
 class Lang {
     seed
@@ -59,14 +93,34 @@ class Lang {
             },
         )
     }
+    pickUntil(
+        prevState: [number],
+        seed: number,
+        f: (phoneme: string) => boolean,
+    ) {
+        let phonemeId
+        let i = 0
+        do {
+            phonemeId = this.pick(prevState, this.hash(seed, i++))[1]
+        } while (!f(phonemes[phonemeId]))
+        return phonemeId
+    }
     generate(length: number, seed: number) {
-        const result = [0] as number[]
+        const result = [0]
         arr(length).forEach(i => {
-            result.push(this.pick([result[i-1]], this.hash(seed, i))[1])
+            result.push(
+                this.pickUntil(
+                    [result[i-1]],
+                    this.hash(seed, i),
+                    id => ssp([
+                        ...result.map(x => getSonority(phonemes[x])), getSonority(id),
+                    ]),
+                )
+            )
         })
         return result.map(x => phonemes[x]).join("")
     }
 }
 
 const lang = new Lang(0.6)
-console.log(arr(10).map(i => lang.generate(5, i)).join("\n"))
+console.log(arr(10).map(i => lang.generate(10, i)).join("\n"))
