@@ -1,6 +1,5 @@
 import { Mat } from "./src/Mat.ts"
 import {
-    arr,
     hash,
     pipe,
  } from "./src/util.ts"
@@ -30,16 +29,16 @@ const mat = pipe(
     ]),
     x => x.map(hash),
     mat => {
-        const sums = mat.gets([null, 0])
-            .map((_, [x]) => mat
+        const sums = mat.indexes([null, 0])
+            .map(([x]) => mat
                 .gets([x, null])
                 .sum()
             )
             .toArray()
         return mat.map((v, [x]) => v/sums[x])
     },
-    mat => mat.gets([null, 0])
-        .map((_, [x]) => mat
+    mat => mat.indexes([null, 0])
+        .map(([x]) => mat
             .gets([x, null])
             .sum()
         ),
