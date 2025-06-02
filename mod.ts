@@ -22,7 +22,7 @@ const phonemesData = `
 console.log(phonemesData)
 
 const phonemes = [
-    "_",
+    "",
     ...phonemesData.flat(),
 ]
 
@@ -36,8 +36,9 @@ const ssp =
 (sonorities: number[]) => {
     console.log(sonorities)
     let dir = 1
-    let prev = -1
+    let prev = -2
     for (const curr of sonorities) {
+        if (prev == curr) return false
         if (dir == 1) {
             if (prev > curr) {
                 if (prev == vowelSonority) {
@@ -122,5 +123,5 @@ class Lang {
     }
 }
 
-const lang = new Lang(0.6)
+const lang = new Lang(0.9)
 console.log(arr(10).map(i => lang.generate(10, i)).join("\n"))
