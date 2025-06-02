@@ -77,3 +77,20 @@ Deno.test("groupByAxis", () => {
         ]),
     )
 })
+
+Deno.test("sumByAxis", () => {
+    assertEquals(
+        pipe(
+            Mat.fromDimension([2, 3]),
+            x => x.sumByAxis(0),
+        ),
+        new Mat([2], [6, 9]),
+    )
+    assertEquals(
+        pipe(
+            Mat.fromDimension([2, 3]),
+            x => x.sumByAxis(1),
+        ),
+        new Mat([3], [1, 5, 9]),
+    )
+})

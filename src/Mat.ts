@@ -92,6 +92,11 @@ export class Mat<T> {
             .map(i => map.get(i)!)
         return new Mat([data.length], data)
     }
+    sumByAxis(axis: number) {
+        return (this as Mat<number>)
+            .groupByAxis(axis)
+            .map(v => v.reduce((a, b) => a+b))
+    }
 
     sum() {
         return (this as Mat<number>).reduce((a, b) => a+b)

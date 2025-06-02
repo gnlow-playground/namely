@@ -30,22 +30,14 @@ const mat = pipe(
     x => x.map(hash),
     mat => {
         const sums = mat
-            .indexes([_, 0])
-            .map(([x]) => mat
-                .gets([x, _])
-                .sum()
-            )
+            .sumByAxis(0)
             .toArray()
         return mat.map((v, [x]) => v/sums[x])
     },
     mat => mat
-        .indexes([_, 0])
-        .map(([x]) => mat
-            .gets([x, _])
-            .sum()
-        ),
+        .sumByAxis(0),
 )
 
 console.log(
-    Mat.fromDimension([2, 3]).groupByAxis(0)
+    mat
 )
