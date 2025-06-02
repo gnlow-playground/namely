@@ -31,15 +31,17 @@ const mat = pipe(
     x => x.map(hash),
     mat => {
         const sums = arr(mat.dimension[0])
-            .map(x => mat.gets([x, null])
-                .reduce((a, b) => a+b)
+            .map(x => mat
+                .gets([x, null])
+                .sum()
             )
         return mat.map((v, [x]) => v/sums[x])
     },
     mat => arr(mat.dimension[0])
-    .map(x => mat.gets([x, null])
-        .reduce((a, b) => a+b)
-    )
+        .map(x => mat
+            .gets([x, null])
+            .sum()
+        ),
 )
 
 console.log(

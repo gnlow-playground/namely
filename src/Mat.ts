@@ -69,4 +69,8 @@ export class Mat {
             )
         }
     }
+
+    sum() {
+        return this.reduce((a, b) => a+b)
+    }
 }
