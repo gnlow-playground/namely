@@ -32,7 +32,7 @@ Deno.test("n2ns, ns2n", () => {
 Deno.test("gets", () => {
     assertEquals(
         pipe(
-            new Mat([2, 3]),
+            Mat.fromDimension([2, 3]),
             x => x.gets([1, null]),
         ),
         new Mat([3], [1, 3, 5])

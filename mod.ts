@@ -1,6 +1,6 @@
 import { Mat } from "./src/Mat.ts"
 import {
-arr,
+    arr,
     hash,
     pipe,
  } from "./src/util.ts"
@@ -24,21 +24,22 @@ const phonemes = [
 ]
 
 const mat = pipe(
-    new Mat([
+    Mat.fromDimension([
         phonemes.length,
         phonemes.length,
     ]),
     x => x.map(hash),
     mat => {
-        const sums = arr(mat.dimension[0])
-            .map(x => mat
+        const sums = mat.gets([null, 0])
+            .map((_, [x]) => mat
                 .gets([x, null])
                 .sum()
             )
+            .toArray()
         return mat.map((v, [x]) => v/sums[x])
     },
-    mat => arr(mat.dimension[0])
-        .map(x => mat
+    mat => mat.gets([null, 0])
+        .map((_, [x]) => mat
             .gets([x, null])
             .sum()
         ),

@@ -3,6 +3,7 @@ export { pipe } from "https://esm.sh/gh/gnlow/pipe@0.1.0/mod.ts"
 
 import xxhash from "https://esm.sh/xxhash-wasm@1.1.0"
 
+// @ts-ignore: Error only on `deno check`?!
 const { h32 } = await xxhash()
 
 export const hash =
