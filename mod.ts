@@ -12,8 +12,7 @@ const phonemesData = `
     m,n
     v,z
     f,s
-    b,d,g
-    p,t,k
+    b,d,g,p,t,k
 `
     .trim()
     .split("\n")
@@ -34,10 +33,11 @@ const vowelSonority = phonemesData.length-1
 
 const ssp =
 (sonorities: number[]) => {
-    console.log(sonorities)
     let dir = 1
     let prev = -2
+    let sylEnd = false
     for (const curr of sonorities) {
+        sylEnd = false
         if (prev == curr) return false
         if (dir == 1) {
             if (prev > curr) {
@@ -51,11 +51,12 @@ const ssp =
         if (dir == -1) {
             if (prev < curr) {
                 dir = 1
+                sylEnd = true
             }
         }
         prev = curr
     }
-    return true
+    return sylEnd ? "sylEnd" : true
 }
 
 class Lang {
@@ -108,20 +109,28 @@ class Lang {
     }
     generate(length: number, seed: number) {
         const result = [0]
+        let out = ""
         arr(length).forEach(i => {
-            result.push(
-                this.pickUntil(
-                    [result[i-1]],
-                    this.hash(seed, i),
-                    id => ssp([
-                        ...result.map(x => getSonority(phonemes[x])), getSonority(id),
-                    ]),
+            do {
+                result.push(
+                    this.pickUntil(
+                        [result[i-1]],
+                        this.hash(seed, i),
+                        id => !!ssp([
+                            ...result.map(x => getSonority(phonemes[x])), getSonority(id),
+                        ]),
+                    )
                 )
+                out += phonemes[result[result.length-1]]
+            } while (
+                ssp(result.map(x => getSonority(phonemes[x])))
+                != "sylEnd"
             )
+            out = out.slice(0, -1) + "-" + out.slice(-1)
         })
-        return result.map(x => phonemes[x]).join("")
+        return out
     }
 }
 
-const lang = new Lang(0.9)
-console.log(arr(10).map(i => lang.generate(10, i)).join("\n"))
+const lang = new Lang(0.6)
+console.log(arr(10).map(i => lang.generate(2, i)).join("\n"))
