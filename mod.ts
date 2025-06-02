@@ -36,20 +36,20 @@ const mat = pipe(
     },      
 )
 
-const pick = pipe(
+const pick =
+(seed: number) => pipe(
     mat,
     mat => mat
         .gets([0, _])
         .toArray(),
-    arr =>
-    (seed: number) => {
+    arr => {
         let pSum = 0
-        return arr.findIndex(p =>
+        return [0, arr.findIndex(p =>
             seed <= (pSum += p)
-        )
-    },  
+        )]
+    },
 )
 
 console.log(
-    pick(0.2)
+    pick(0.8)
 )
