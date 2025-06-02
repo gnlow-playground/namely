@@ -29,7 +29,8 @@ const mat = pipe(
     ]),
     x => x.map(hash),
     mat => {
-        const sums = mat.indexes([_, 0])
+        const sums = mat
+            .indexes([_, 0])
             .map(([x]) => mat
                 .gets([x, _])
                 .sum()
@@ -37,7 +38,8 @@ const mat = pipe(
             .toArray()
         return mat.map((v, [x]) => v/sums[x])
     },
-    mat => mat.indexes([_, 0])
+    mat => mat
+        .indexes([_, 0])
         .map(([x]) => mat
             .gets([x, _])
             .sum()
