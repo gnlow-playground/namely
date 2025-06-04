@@ -21,7 +21,7 @@ const phonemesData = `
 console.log(phonemesData)
 
 const phonemes = [
-    "",
+    "_",
     ...phonemesData.flat(),
 ]
 
@@ -114,7 +114,7 @@ class Lang {
             do {
                 result.push(
                     this.pickUntil(
-                        [result[i-1]],
+                        [result[result.length-1]],
                         this.hash(seed, i),
                         id => !!ssp([
                             ...result.map(x => getSonority(phonemes[x])), getSonority(id),

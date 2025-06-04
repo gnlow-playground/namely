@@ -6,6 +6,15 @@ name generator
     - Polars.js: 브라우저 지원 안함
     - Danfo.js: `Uncaught (in promise) TypeError: this.util.TextEncoder is not a constructor`
 
+### 음절 구조
+- https://wals.info/chapter/12
+
+||n|
+|-|-|
+|<=CV|61|
+|<=CGVC|274|
+|>CGVC|151|
+
 ## Ref
 - Sonority Sequencing Priciple
 - https://github.com/gnlow-playground/Langen
