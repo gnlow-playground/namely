@@ -14,11 +14,17 @@ export class Mat<T> {
         this.data = data
     }
 
-    static fromDimension<T>(dimension: number[]) {
+    static fromDimension(dimension: number[]) {
         return new Mat<number>(
             dimension,
             arr(dimension.reduce((a, b) => a*b, 1)),
         )
+    }
+    // deno-lint-ignore no-explicit-any
+    static fromSelections<As extends any[]>
+    (...selections: { [K in keyof As]: As[K][] }) {
+        const mat = Mat.fromDimension(selections.map(x => x.length))
+        return mat.map(n => mat.n2ns(n).map((n, i) => selections[i][n])) as Mat<{ [K in keyof As]: As[K] }>
     }
 
     ns2n(ns: number[]) { return ns2n(this.dimension)(ns) }
