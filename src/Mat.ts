@@ -22,7 +22,7 @@ export class Mat<T> {
     }
     // deno-lint-ignore no-explicit-any
     static fromSelections<As extends any[]>
-    (...selections: { [K in keyof As]: As[K][] }) {
+    (selections: { [K in keyof As]: As[K][] }) {
         const mat = Mat.fromDimension(selections.map(x => x.length))
         return mat.map(n => mat.n2ns(n).map((n, i) => selections[i][n])) as Mat<{ [K in keyof As]: As[K] }>
     }

@@ -97,10 +97,10 @@ Deno.test("sumByAxis", () => {
 
 Deno.test("fromSelections", () => {
     assertEquals(
-        Mat.fromSelections(
-            ["Hello", "Goodbye"] as const,
-            ["World", "My Dear"] as const,
-        )
+        Mat.fromSelections([
+            ["Hello", "Goodbye"],
+            ["World", "My Dear"],
+        ] as const)
         .map(([a, b]) => `${a}, ${b}` as const)
         .toArray(),
         [
