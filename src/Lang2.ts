@@ -21,7 +21,7 @@ class Lang2 {
             .map(x => pick(x)(this.rand()))
             .join("")
     }
-    pickSyllable(structure: string) {
+    static pickSyllableTry(structure: string) {
         return structure
             .replace("(c)", pick([
                 [0.5, "c"],
@@ -33,6 +33,21 @@ class Lang2 {
                     uniform,
                     pick,
                 )(lang.rand())
+            )
+    }
+    pickSyllable() {
+        return until
+            ((x: string) => pipe(
+                x,
+                x => x.split(""),
+                x => x.map(getSonority),
+                x => ssp(x) == true,
+            ))
+            (() => 
+                pipe(
+                    lang.pickStructure(),
+                    Lang2.pickSyllableTry,
+                )
             )
     }
 
@@ -80,18 +95,7 @@ const seed = Math.random()
 console.log(seed)
 const lang = new Lang2(seed)
 console.log(
-    arr(15).map(() => until
-        ((x: string) => pipe(
-            x,
-            x => x.split(""),
-            x => x.map(getSonority),
-            x => ssp(x) == true,
-        ))
-        (() => 
-            pipe(
-                lang.pickStructure(),
-                lang.pickSyllable,
-            )
-        )
+    arr(15).map(() => 
+        lang.pickSyllable()
     )
 )
