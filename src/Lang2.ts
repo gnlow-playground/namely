@@ -1,4 +1,4 @@
-import { arr, hash, normalize, pick, pipe, tuple } from "./util.ts"
+import { arr, hash, normalize, pick, pipe, tuple, uniform } from "./util.ts"
 import { icdf } from "./util/icdf.ts"
 
 class Lang2 {
@@ -53,9 +53,27 @@ class Lang2 {
     }
 }
 
-const lang = new Lang2(0.128)
+const phonemes = {
+    c: "lrmnvzfsbdgptk",
+    g: "jw",
+    v: "aeiuo",
+}
+
+const lang = new Lang2(0.23)
 console.log(
-    arr(10).map(() => 
-        lang.pickStructure().join("")
+    arr(15).map(() => 
+        lang.pickStructure()
+            .join("")
+            .replace("(c)", pick([
+                [0.5, "c"],
+                [0.5, ""],
+            ])(lang.rand()))
+            .replaceAll(/[cgv]/g, s =>
+                pipe(
+                    phonemes[s as "c" | "g" | "v"].split(""),
+                    uniform,
+                    pick,
+                )(lang.rand())
+            )
     )
 )

@@ -62,3 +62,19 @@ export const tuple =
 <Args extends any[]>
 (...args: Args) =>
     args
+
+export const until =
+<I>
+(f: (i: I) => unknown) =>
+(v: () => I) => {
+    let res: I
+    do {
+        res = v()
+    } while (!f(res))
+    return res
+}
+
+export const uniform =
+<A>
+(as: A[]) =>
+    as.map(a => tuple(1/as.length, a))
