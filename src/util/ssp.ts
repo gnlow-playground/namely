@@ -24,6 +24,7 @@ export const ssp =
     let prev = -2
     let sylEnd = false
     for (const curr of sonorities) {
+        if (sylEnd) return false
         sylEnd = false
         if (prev == curr) return false
         if (dir == 1) {

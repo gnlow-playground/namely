@@ -38,11 +38,11 @@ class Lang2 {
 
     static getStructures(rand: () => number) {
         const onset = pick([
-            [0.2, ["(c)"]],
-            [0.3, ["(c)", "cg"]],
-            [0.2, ["(c)", "cc"]],
-            [0.2, ["(c)", "cc", "ccg"]],
-            [0.1, ["(c)", "cc", "ccc"]],
+            [0.2, ["c", ""]],
+            [0.3, ["c", "", "cg"]],
+            [0.2, ["c", "", "cc"]],
+            [0.2, ["c", "", "cc", "ccg"]],
+            [0.1, ["c", "", "cc", "ccc"]],
         ])(rand())
         const nucleus = pick([
             [0.3, ["v"]],
@@ -76,7 +76,9 @@ const phonemes = {
     v: "aeiuo",
 }
 
-const lang = new Lang2(0.333)
+const seed = Math.random()
+console.log(seed)
+const lang = new Lang2(seed)
 console.log(
     arr(15).map(() => until
         ((x: string) => pipe(
