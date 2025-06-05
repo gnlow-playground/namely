@@ -33,3 +33,26 @@ export const ns2n =
 export const arr =
 (length: number) =>
     Array.from({ length }, (_, i) => i)
+
+export const pick =
+<T>
+(selections: [number, T][]) =>
+(target: number) => {
+    if (selections.find(([p]) => p<0)) {
+        throw new Error("Probability shouldn't be negative")
+    }
+    let sum = 0
+    return selections.find(([p]) =>
+        target < (sum += p)
+    )![1]
+}
+
+export const normalize =
+<T>
+(selections: [number, T][]) => {
+    if (selections.find(([p]) => p<0)) {
+        throw new Error("Probability shouldn't be negative")
+    }
+    const sum = selections.reduce((a, [b]) => a + b, 0)
+    return selections.map(([p, v]) => [p/sum, v])
+}
