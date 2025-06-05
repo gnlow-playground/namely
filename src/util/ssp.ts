@@ -14,6 +14,10 @@ const phonemesData = `
 
 const vowelSonority = phonemesData.length-1
 
+export const getSonority =
+(phoneme: string) =>
+    phonemesData.findIndex(v => v.includes(phoneme))
+
 export const ssp =
 (sonorities: number[]) => {
     let dir = 1

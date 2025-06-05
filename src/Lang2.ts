@@ -1,5 +1,6 @@
-import { arr, hash, normalize, pick, pipe, tuple, uniform } from "./util.ts"
+import { arr, hash, normalize, pick, pipe, tuple, uniform, until } from "./util.ts"
 import { icdf } from "./util/icdf.ts"
+import { getSonority, ssp } from "./util/ssp.ts";
 
 class Lang2 {
     seed
@@ -16,7 +17,23 @@ class Lang2 {
         )
     }
     pickStructure() {
-        return this.structure.map(x => pick(x)(this.rand()))
+        return this.structure
+            .map(x => pick(x)(this.rand()))
+            .join("")
+    }
+    pickSyllable(structure: string) {
+        return structure
+            .replace("(c)", pick([
+                [0.5, "c"],
+                [0.5, ""],
+            ])(lang.rand()))
+            .replaceAll(/[cgv]/g, s =>
+                pipe(
+                    phonemes[s as "c" | "g" | "v"].split(""),
+                    uniform,
+                    pick,
+                )(lang.rand())
+            )
     }
 
     static getStructures(rand: () => number) {
@@ -59,21 +76,20 @@ const phonemes = {
     v: "aeiuo",
 }
 
-const lang = new Lang2(0.23)
+const lang = new Lang2(0.333)
 console.log(
-    arr(15).map(() => 
-        lang.pickStructure()
-            .join("")
-            .replace("(c)", pick([
-                [0.5, "c"],
-                [0.5, ""],
-            ])(lang.rand()))
-            .replaceAll(/[cgv]/g, s =>
-                pipe(
-                    phonemes[s as "c" | "g" | "v"].split(""),
-                    uniform,
-                    pick,
-                )(lang.rand())
+    arr(15).map(() => until
+        ((x: string) => pipe(
+            x,
+            x => x.split(""),
+            x => x.map(getSonority),
+            x => ssp(x) == true,
+        ))
+        (() => 
+            pipe(
+                lang.pickStructure(),
+                lang.pickSyllable,
             )
+        )
     )
 )
