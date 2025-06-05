@@ -54,5 +54,11 @@ export const normalize =
         throw new Error("Probability shouldn't be negative")
     }
     const sum = selections.reduce((a, [b]) => a + b, 0)
-    return selections.map(([p, v]) => [p/sum, v])
+    return selections.map(([p, v]) => tuple(p/sum, v))
 }
+
+export const tuple =
+// deno-lint-ignore no-explicit-any
+<Args extends any[]>
+(...args: Args) =>
+    args
